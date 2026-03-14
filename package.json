@@ -1,0 +1,41 @@
+{
+  "name": "@decisionops/skill",
+  "version": "0.1.0",
+  "description": "Decision Ops skill bundle for AI coding agents",
+  "license": "Apache-2.0",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/decisionops/skill.git"
+  },
+  "homepage": "https://github.com/decisionops/skill#readme",
+  "bugs": {
+    "url": "https://github.com/decisionops/skill/issues"
+  },
+  "main": "./src/index.ts",
+  "bin": {
+    "decision-ops-skill": "./src/cli.ts"
+  },
+  "files": [
+    "src/cli.ts",
+    "src/index.ts",
+    "decision-ops",
+    "platforms",
+    "LICENSE"
+  ],
+  "scripts": {
+    "validate": "bun run scripts/validate.ts",
+    "test": "bun test",
+    "typecheck": "bun run tsc --noEmit",
+    "cli": "bun run src/cli.ts",
+    "test:install": "bash scripts/test-install.sh"
+  },
+  "dependencies": {
+    "@iarna/toml": "^2.2.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "bun-types": "^1.3.10",
+    "typescript": "^5.9.2"
+  }
+}

@@ -1,0 +1,26 @@
+id = "vscode"
+display_name = "VS Code"
+
+[skill]
+supported = false
+
+[mcp]
+supported = true
+scope = "project"
+format = "json_map"
+root_key = "servers"
+build_path = ".vscode/mcp.json"
+install_path_env = "VSCODE_MCP_CONFIG_PATH"
+install_path_default = "{repo_path}/.vscode/mcp.json"
+
+[manifest]
+supported = true
+build_path = ".decisionops/manifest.toml"
+
+[auth]
+mode = "interactive_handoff"
+instructions = [
+  "Open {display_name} MCP settings and verify server '{mcp_server_name}' exists at '{mcp_server_url}'.",
+  "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
+  "Complete the prompted authentication flow, then retry the same MCP tool call.",
+]

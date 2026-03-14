@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "methodology": {
+    "baseline": "Run each case without explicitly invoking $decision-ops and capture the output.",
+    "with_skill": "Run the same case with $decision-ops active and compare the result against the baseline output.",
+    "grader": "Use automated rubric checks when the expected behavior is deterministic. Keep human review for activation quality, missing context, and decision quality.",
+    "metrics": [
+      "activation_precision",
+      "activation_recall",
+      "workflow_fidelity",
+      "decision_quality",
+      "baseline_delta",
+      "latency",
+      "tokens"
+    ]
+  },
+  "cases": [
+    {
+      "id": "recordable-quick-rollout",
+      "task": "We need to choose whether to release a new pricing page behind a feature flag or switch all users at once. Review prior decisions, decide on a rollout, and prepare the decision draft.",
+      "expected_behavior": [
+        "Classifies the task as recordable.",
+        "Reads .decisionops/manifest.toml when present before calling the central lifecycle.",
+        "Shows or describes the one-step gate with Quick, Comprehensive, Skip, or Other choices.",
+        "Compares at least two rollout options before deciding.",
+        "Returns or references decision_id after a successful publish."
+      ],
+      "rubric": [
+        "Captures context, options, decision, and consequences clearly.",
+        "Uses the documented MCP lifecycle in the correct order.",
+        "Does not claim local markdown is the canonical store."
+      ],
+      "compare_to_baseline": true,
+      "requires_human_review": true
+    },
+    {
+      "id": "recordable-compliance-retention",
+      "task": "A new enterprise contract may require us to retain audit exports for one year instead of 30 days. Evaluate options, highlight compliance risk, and draft the decision.",
+      "expected_behavior": [
+        "Classifies the task as recordable.",
+        "Surfaces hard constraints such as compliance or legal obligations.",
+        "Compares retention options with reversibility and operational cost.",
+        "Produces a validation plan with metric, baseline, target, and by_date.",
+        "Fails closed if validation errors remain."
+      ],
+      "rubric": [
+        "Calls out compliance as a hard constraint rather than a soft preference.",
+        "Makes the tradeoff between storage cost and contractual risk explicit.",
+        "Uses single-option justification only if multiple viable options do not exist."
+      ],
+      "compare_to_baseline": true,
+      "requires_human_review": true
+    },
+    {
+      "id": "manifest-bound-fallback",
+      "task": "Choose whether to move from Elasticsearch to OpenSearch when the repository is not mapped centrally but a valid .decisionops/manifest.toml exists.",
+      "expected_behavior": [
+        "Explains that central repository resolution failed.",
+        "Continues in manifest-bound mode using org_id and project_id from the manifest.",
+        "Keeps the canonical store as the central MCP lifecycle rather than a local markdown fallback.",
+        "Compares at least two viable options before deciding."
+      ],
+      "rubric": [
+        "States manifest-bound mode explicitly.",
+        "Preserves the normal workflow after fallback.",
+        "Avoids silent context drift between manifest and central state."
+      ],
+      "compare_to_baseline": true,
+      "requires_human_review": true
+    },
+    {
+      "id": "non-recordable-typo",
+      "task": "Fix the typo in docs/getting-started.md and do not create a decision entry.",
+      "expected_behavior": [
+        "Classifies the task as non-recordable or selects Skip.",
+        "Does not attempt the central write lifecycle.",
+        "Continues with the implementation without decision output."
+      ],
+      "rubric": [
+        "Avoids false-positive activation.",
+        "Keeps the response brief and task-focused."
+      ],
+      "compare_to_baseline": true,
+      "requires_human_review": false
+    }
+  ]
+}

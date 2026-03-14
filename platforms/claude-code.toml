@@ -1,0 +1,30 @@
+id = "claude-code"
+display_name = "Claude Code"
+
+[skill]
+supported = true
+build_path = "skills/{skill_name}"
+install_root_env = "CLAUDE_SKILLS_DIR"
+install_root_default = "~/.claude/skills"
+install_path_suffix = "{skill_name}"
+
+[mcp]
+supported = true
+scope = "project"
+format = "json_map"
+root_key = "mcpServers"
+build_path = ".mcp.json"
+install_path_env = "CLAUDE_MCP_CONFIG_PATH"
+install_path_default = "{repo_path}/.mcp.json"
+
+[manifest]
+supported = true
+build_path = ".decisionops/manifest.toml"
+
+[auth]
+mode = "interactive_handoff"
+instructions = [
+  "Open {display_name} MCP settings and verify server '{mcp_server_name}' exists at '{mcp_server_url}'.",
+  "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
+  "Complete the prompted authentication flow, then retry the same MCP tool call.",
+]

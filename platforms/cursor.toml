@@ -1,0 +1,30 @@
+id = "cursor"
+display_name = "Cursor"
+
+[skill]
+supported = true
+build_path = "skills/{skill_name}"
+install_root_env = "CURSOR_SKILLS_DIR"
+install_root_default = "~/.cursor/skills"
+install_path_suffix = "{skill_name}"
+
+[mcp]
+supported = true
+scope = "project"
+format = "json_map"
+root_key = "mcpServers"
+build_path = ".cursor/mcp.json"
+install_path_env = "CURSOR_MCP_CONFIG_PATH"
+install_path_default = "{repo_path}/.cursor/mcp.json"
+
+[manifest]
+supported = true
+build_path = ".decisionops/manifest.toml"
+
+[auth]
+mode = "interactive_handoff"
+instructions = [
+  "Open {display_name} MCP settings and verify server '{mcp_server_name}' exists at '{mcp_server_url}'.",
+  "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
+  "Complete the prompted authentication flow, then retry the same MCP tool call.",
+]
