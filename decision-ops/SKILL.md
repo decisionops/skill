@@ -1,7 +1,7 @@
 ---
 name: decision-ops
 description: "Use this skill when a prompt implies a meaningful product, technical, or business tradeoff and the user needs project rationale captured or retrieved in Decision Ops. Trigger on prompts like 'should we...', 'which option...', 'choose between...', 'prioritize...', 'what should we cut', 'descope', 'migrate to...', 'how should we release this', 'staged rollout', 'change pricing/onboarding/KPIs', 'improve reliability/performance/security', 'change vendors', 'select a partner', 'allocate budget', 'change revenue model', 'enter new market', 'change go-to-market', or 'compliance requirement'. Skip typo fixes, doc spelling, pure reformatting, and version bumps with no architectural choice."
-compatibility: "Requires repository-local files and network access to the Decision Ops MCP service at https://api.aidecisionops.com/mcp."
+compatibility: "Requires repository-local files and network access to the Decision Ops MCP service at https://api.aidecisionops.com/mcp. MCP authentication requires interactive browser OAuth (authorization code + PKCE) — there is no API key or token-based alternative for IDE users. The MCP server must be manually enabled in the IDE settings before first use."
 metadata:
   maturity: "stable"
 ---
@@ -31,11 +31,31 @@ For IDE-driven usage, prefer a repository-local manifest at `.decisionops/manife
 
 Use this workflow only when the task includes an explicit, non-trivial product, technical, or business tradeoff worth recording.
 
-1. Run the one-step gate.
+1. Run the one-step gate with client hints.
 - If `.decisionops/manifest.toml` exists, read it first and use `repo_ref` plus `default_branch` as the preferred local binding context.
-- Call `do-prepare-decision-gate` to resolve project context and classify whether the task is recordable.
+- **Before calling the gate**, pre-classify the task yourself and include `client_hints` in the gate call. You have better semantic understanding of the user's intent than keyword matching. Compute:
+  - `recordable`: Does this task involve a meaningful tradeoff worth recording? (choosing between alternatives, introducing/removing dependencies, changing architecture, etc.)
+  - `classification_reason`: A concrete, one-sentence explanation of why this is or isn't recordable.
+  - `risk_level`: `"low"` | `"medium"` | `"high"` — based on blast radius, reversibility, and stakeholder impact.
+  - `suggested_mode`: `"quick"` for low/medium risk single-domain decisions, `"comprehensive"` for high-risk or cross-domain ones.
+  - `signal_types`: Which domains this touches — `["technical"]`, `["product", "business"]`, etc.
+- Call `do-prepare-decision-gate` with `client_hints` included. The backend uses your hints when its own keyword heuristic would otherwise miss the signal. Example:
+  ```json
+  {
+    "repo_ref": "owner/repo",
+    "task_summary": "Which ORM should we use — Drizzle vs Prisma vs Kysely",
+    "client_hints": {
+      "recordable": true,
+      "classification_reason": "Choosing a project ORM is a durable technical dependency decision.",
+      "risk_level": "medium",
+      "suggested_mode": "quick",
+      "signal_types": ["technical"]
+    }
+  }
+  ```
 - If central repository resolution fails but the manifest contains `org_id` and `project_id`, continue in manifest-bound mode and say so explicitly.
-- Show one user prompt with resolved `org/project/repo/branch`, the classification reason, and the choices `Quick`, `Comprehensive`, `Skip`, or `Other`.
+- **Always** show one user prompt with resolved `org/project/repo/branch`, the classification reason, and the choices `Quick`, `Comprehensive`, `Skip`, or `Other`.
+- If the gate returns `recordable: false`, still present the choices to the user. The gate is a heuristic hint, not a final decision. If the user's prompt clearly involves choosing between alternatives (e.g., "Which ORM should I use?", "Drizzle vs Prisma"), treat that as a decision worth recording regardless of the gate classification. Tell the user the gate classified it as not recordable, but offer to proceed anyway.
 
 2. Gather evidence for the selected mode.
 - `Skip`: stop decision flow and continue implementation without a decision write.

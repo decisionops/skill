@@ -129,11 +129,12 @@ export type ManifestContext = {
   default_branch?: string;
   mcp_server_name?: string;
   mcp_server_url?: string;
+  repo_id?: string;
 };
 
 // ── IDE-level install ──
 
-const SKILL_BUNDLE_DIRS = ["references", "scripts"];
+const SKILL_BUNDLE_DIRS = ["references", "scripts", "evals"];
 const SKILL_BUNDLE_FILES = ["SKILL.md"];
 
 function copyDirRecursive(src: string, dest: string): string[] {
@@ -235,6 +236,7 @@ export function installMcpToRepo(
       content +=
         `\n[mcp_servers.${serverName}]\n` +
         `type = "http"\n` +
+        `enabled = true\n` +
         `url = "${serverUrl}"\n`;
       fs.writeFileSync(configPath, content);
     }
@@ -254,17 +256,42 @@ export function installManifestToRepo(
 
   fs.mkdirSync(manifestDir, { recursive: true });
 
-  const lines = [
-    `version = 1`,
-    `org_id = "${manifest.org_id}"`,
-    `project_id = "${manifest.project_id}"`,
-    `repo_ref = "${manifest.repo_ref}"`,
-  ];
-  if (manifest.default_branch) lines.push(`default_branch = "${manifest.default_branch}"`);
-  if (manifest.mcp_server_name) lines.push(`mcp_server_name = "${manifest.mcp_server_name}"`);
-  if (manifest.mcp_server_url) lines.push(`mcp_server_url = "${manifest.mcp_server_url}"`);
+  const data: Record<string, unknown> = {
+    version: 1,
+    org_id: manifest.org_id,
+    project_id: manifest.project_id,
+    repo_ref: manifest.repo_ref,
+  };
+  if (manifest.repo_id) data.repo_id = manifest.repo_id;
+  if (manifest.default_branch) data.default_branch = manifest.default_branch;
+  if (manifest.mcp_server_name) data.mcp_server_name = manifest.mcp_server_name;
+  if (manifest.mcp_server_url) data.mcp_server_url = manifest.mcp_server_url;
 
-  fs.writeFileSync(manifestPath, lines.join("\n") + "\n");
+  fs.writeFileSync(manifestPath, TOML.stringify(data as any), "utf8");
 
   return { platform: "repo", path: manifestPath, files: [manifestPath] };
+}
+
+// ── Auth handoff ──
+
+export type AuthHandoffEntry = {
+  id: string;
+  display_name: string;
+  mode: string;
+  platform_definition: string;
+  mcp_config_path: string;
+  instructions: string[];
+};
+
+export function writeAuthHandoff(
+  repoPath: string | null,
+  outputDir: string,
+  entries: AuthHandoffEntry[],
+): InstallResult {
+  const filePath = repoPath
+    ? path.join(repoPath, ".decisionops", "auth-handoff.toml")
+    : path.join(outputDir, "auth-handoff.toml");
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, TOML.stringify({ version: 1, platforms: entries } as any), "utf8");
+  return { platform: "repo", path: filePath, files: [filePath] };
 }

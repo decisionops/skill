@@ -48,6 +48,16 @@ Then configure the MCP server in your platform's config. For Claude Code, add to
 }
 ```
 
+### After install: authenticate and enable MCP tools
+
+Installing the skill and MCP config is not enough on its own. You must also:
+
+1. **Enable the MCP server** in your IDE settings. For example, Cursor requires toggling it on in **Settings → Tools & MCP**. Tools appear as "Disabled" by default.
+2. **Complete the browser OAuth flow** on first MCP tool invocation. The IDE opens a browser window for DecisionOps sign-in and consent. After approving, retry the tool call in the IDE.
+3. **Approve tool invocations** when the IDE prompts you (e.g., Claude Code requires manual approval per MCP tool call).
+
+IDE MCP authentication uses OAuth (authorization code + PKCE) exclusively. There is no API key or token-based method. CLI auth (`dops login`) does not carry over to IDE MCP sessions — each IDE authenticates independently.
+
 And bind the repository by creating `.decisionops/manifest.toml`:
 
 ```toml

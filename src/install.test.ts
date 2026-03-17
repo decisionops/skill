@@ -409,6 +409,7 @@ describe("Repo-level install", () => {
       expect(content).toContain(`[mcp_servers.${MCP_SERVER_NAME}]`);
       expect(content).toContain(`url = "${MCP_SERVER_URL}"`);
       expect(content).toContain(`type = "http"`);
+      expect(content).toContain("enabled = true");
     });
 
     test("does not duplicate codex section on re-install", () => {
