@@ -69,6 +69,7 @@ Use this workflow only when the task includes an explicit, non-trivial product, 
 - Choose and implement the preferred option.
 
 4. Validate the draft before publish.
+- Default to `scope_level: project` for project-wide decisions. Use `scope_level: repo` only when the decision should be bound to one repository.
 - Create the draft with `do-create-decision-draft`.
 - Run `do-validate-decision`.
 - Fix validation failures before publishing.

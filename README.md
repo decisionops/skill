@@ -113,6 +113,8 @@ The skill uses 6 MCP tools provided by the DecisionOps service:
 
 Full payload shapes and error contracts are in `decision-ops/references/mcp-interface.md`.
 
+Project-scoped drafts are the default and can be created even when a project has no linked repositories. Linked repositories are only required for repo-scoped drafts and repo_ref-based project resolution.
+
 ## Skill structure
 
 ```

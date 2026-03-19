@@ -13,7 +13,8 @@ On first tool invocation, the IDE receives a `401` auth challenge with a `WWW-Au
 `do-prepare-decision-gate`
 - Purpose: combine project resolution and decision classification for one-step user prompting.
 - Input:
-  - `repo_ref` (path or URL)
+  - `repo_ref` (path or URL; optional when `project_id` is provided)
+  - `project_id` (optional when `repo_ref` is provided)
   - `branch` (optional)
   - `task_summary`
   - `changed_paths` (optional)
@@ -49,12 +50,17 @@ On first tool invocation, the IDE receives a `401` auth challenge with a `WWW-Au
   - `org_id`, `project_id`
   - `title`, `context`, `decision`
   - `type` (`technical|product|business|governance`, default `technical`)
+  - `scope_level` (`org|project|repo`, default `project`)
+  - `repo_id` (optional; used for `scope_level=repo`, especially in multi-repo projects)
   - `options`, `consequences`, `related` (arrays)
   - `supersedes` (array)
   - `single_option_justification` (string; required when only one option is supplied)
   - `validation_plan` (`metric`, `baseline`, `target`, `by_date`)
 - Output:
   - `decision_id`, `version`, `status` (`Proposed`)
+- Notes:
+  - Project-scoped drafts can be created even when the project has no linked repositories.
+  - Only `scope_level=repo` requires linked repository resolution. Multi-repo projects must provide `repo_id` explicitly for repo-scoped drafts.
 
 `do-validate-decision`
 - Input:
@@ -65,6 +71,9 @@ On first tool invocation, the IDE receives a `401` auth challenge with a `WWW-Au
   - `valid` (bool)
   - `errors[]` (`code`, `field`, `message`)
   - `warnings[]` (`code`, `field`, `message`)
+- Notes:
+  - When validating an inline `draft`, scope resolution is checked too.
+  - Repo-scoped drafts can fail validation for missing or ambiguous repository linkage before creation.
 
 `do-publish-decision`
 - Input:
