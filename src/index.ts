@@ -104,7 +104,7 @@ export function resolveInstallPath(spec: PlatformInstallSpec, context: Record<st
 }
 
 export function authInstructions(platform: PlatformDefinition, context: Record<string, string>): string[] | null {
-  if (platform.auth?.mode !== "interactive_handoff") return null;
+  if (platform.auth?.mode !== "browser_oauth") return null;
   return (platform.auth.instructions ?? []).map((step) => formatTemplate(step, context));
 }
 
@@ -270,28 +270,4 @@ export function installManifestToRepo(
   fs.writeFileSync(manifestPath, TOML.stringify(data as any), "utf8");
 
   return { platform: "repo", path: manifestPath, files: [manifestPath] };
-}
-
-// ── Auth handoff ──
-
-export type AuthHandoffEntry = {
-  id: string;
-  display_name: string;
-  mode: string;
-  platform_definition: string;
-  mcp_config_path: string;
-  instructions: string[];
-};
-
-export function writeAuthHandoff(
-  repoPath: string | null,
-  outputDir: string,
-  entries: AuthHandoffEntry[],
-): InstallResult {
-  const filePath = repoPath
-    ? path.join(repoPath, ".decisionops", "auth-handoff.toml")
-    : path.join(outputDir, "auth-handoff.toml");
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, TOML.stringify({ version: 1, platforms: entries } as any), "utf8");
-  return { platform: "repo", path: filePath, files: [filePath] };
 }

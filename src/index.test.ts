@@ -207,7 +207,7 @@ describe("resolveInstallPath", () => {
 // ── authInstructions ──
 
 describe("authInstructions", () => {
-  test("returns null for non-interactive_handoff mode", () => {
+  test("returns null for non-browser_oauth mode", () => {
     const platform: PlatformDefinition = {
       id: "test",
       display_name: "Test",
@@ -217,12 +217,12 @@ describe("authInstructions", () => {
     expect(authInstructions(platform, {})).toBeNull();
   });
 
-  test("returns instructions for interactive_handoff", () => {
+  test("returns instructions for browser_oauth", () => {
     const platform: PlatformDefinition = {
       id: "test",
       display_name: "Test",
       auth: {
-        mode: "interactive_handoff",
+        mode: "browser_oauth",
         instructions: ["Step 1: {action}", "Step 2: done"],
       },
       __file__: "test.toml",

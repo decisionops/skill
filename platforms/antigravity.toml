@@ -21,7 +21,7 @@ supported = true
 build_path = ".decisionops/manifest.toml"
 
 [auth]
-mode = "interactive_handoff"
+mode = "browser_oauth"
 instructions = [
   "Open {display_name} MCP settings and verify server '{mcp_server_name}' exists at '{mcp_server_url}'.",
   "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
