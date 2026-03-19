@@ -42,6 +42,7 @@ Then configure the MCP server in your platform's config. For Claude Code, add to
 {
   "mcpServers": {
     "decision-ops": {
+      "type": "http",
       "url": "https://api.aidecisionops.com/mcp"
     }
   }
@@ -61,15 +62,13 @@ IDE MCP authentication uses OAuth (authorization code + PKCE) exclusively. There
 And bind the repository by creating `.decisionops/manifest.toml`:
 
 ```toml
-[decisionops]
+version = 1
 org_id = "your-org"
 project_id = "your-project"
 repo_ref = "owner/repo"
 default_branch = "main"
-
-[mcp]
-server_name = "decision-ops"
-server_url = "https://api.aidecisionops.com/mcp"
+mcp_server_name = "decision-ops"
+mcp_server_url = "https://api.aidecisionops.com/mcp"
 ```
 
 ## Supported platforms
