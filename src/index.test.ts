@@ -5,6 +5,9 @@ import {
   SKILL_NAME,
   SKILL_DIR,
   PLATFORMS_DIR,
+  DEFAULT_PLATFORM_CATALOG_PATH,
+  DEFAULT_MCP_SERVER_NAME,
+  DEFAULT_MCP_SERVER_URL,
   loadPlatforms,
   selectPlatforms,
   expandHome,
@@ -12,6 +15,8 @@ import {
   formatTemplate,
   resolveInstallPath,
   authInstructions,
+  buildPlatformCatalog,
+  writePlatformCatalog,
   type PlatformDefinition,
   type PlatformInstallSpec,
 } from "./index";
@@ -238,6 +243,57 @@ describe("authInstructions", () => {
       __file__: "test.toml",
     };
     expect(authInstructions(platform, {})).toBeNull();
+  });
+});
+
+// ── platform catalog ──
+
+describe("platform catalog", () => {
+  test("buildPlatformCatalog returns sorted combined platform metadata", () => {
+    const catalog = buildPlatformCatalog();
+
+    expect(catalog.version).toBe(1);
+    expect(catalog.defaults.skill_name).toBe(SKILL_NAME);
+    expect(catalog.defaults.mcp_server_name).toBe(DEFAULT_MCP_SERVER_NAME);
+    expect(catalog.defaults.mcp_server_url).toBe(DEFAULT_MCP_SERVER_URL);
+    expect(catalog.platforms.length).toBeGreaterThan(0);
+    expect(catalog.platforms.map((platform) => platform.id)).toEqual(
+      [...catalog.platforms.map((platform) => platform.id)].sort(),
+    );
+
+    const codex = catalog.platforms.find((platform) => platform.id === "codex");
+    expect(codex).toBeDefined();
+    expect(codex?.platform_definition).toBe("platforms/codex.toml");
+    expect(codex?.skill.supported).toBe(true);
+    expect(codex?.skill.install_path_template).toBe("~/.codex/skills/{skill_name}");
+    expect(codex?.mcp.config_path_template).toBe("~/.codex/config.toml");
+    expect(codex?.auth.mode).toBe("browser_oauth");
+    expect(codex?.auth.instructions.length).toBeGreaterThan(0);
+    expect(codex?.cli_install_template).toContain("decision-ops-skill install all codex");
+
+    const vscode = catalog.platforms.find((platform) => platform.id === "vscode");
+    expect(vscode?.skill.supported).toBe(false);
+    expect(vscode?.skill.install_path_template).toBeNull();
+    expect(vscode?.mcp.root_key).toBe("servers");
+  });
+
+  test("writePlatformCatalog writes JSON to disk", () => {
+    const tmpDir = fs.mkdtempSync(path.join("/tmp", "platform-catalog-"));
+
+    try {
+      const outputPath = path.join(tmpDir, "platform-catalog.json");
+      const writtenPath = writePlatformCatalog(outputPath);
+
+      expect(writtenPath).toBe(outputPath);
+      expect(DEFAULT_PLATFORM_CATALOG_PATH).toContain("platform-catalog.json");
+
+      const written = JSON.parse(fs.readFileSync(outputPath, "utf8"));
+      expect(written.version).toBe(1);
+      expect(Array.isArray(written.platforms)).toBe(true);
+      expect(written.platforms.length).toBeGreaterThan(0);
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
   });
 });
 

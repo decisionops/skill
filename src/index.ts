@@ -3,8 +3,12 @@ import path from "node:path";
 import * as TOML from "@iarna/toml";
 
 export const SKILL_NAME = "decision-ops";
+export const ROOT_DIR = path.join(import.meta.dir, "..");
 export const SKILL_DIR = path.join(import.meta.dir, "..", "decision-ops");
 export const PLATFORMS_DIR = path.join(import.meta.dir, "..", "platforms");
+export const DEFAULT_MCP_SERVER_NAME = "decision-ops-mcp";
+export const DEFAULT_MCP_SERVER_URL = "https://api.aidecisionops.com/mcp";
+export const DEFAULT_PLATFORM_CATALOG_PATH = path.join(PLATFORMS_DIR, "platform-catalog.json");
 
 export type PlatformInstallSpec = {
   supported?: boolean;
@@ -32,6 +36,48 @@ export type PlatformDefinition = {
   manifest?: PlatformInstallSpec;
   auth?: PlatformAuthSpec;
   __file__: string;
+};
+
+export type PlatformCatalogEntry = {
+  id: string;
+  display_name: string;
+  platform_definition: string;
+  skill: {
+    supported: boolean;
+    install_path_template: string | null;
+    install_path_env: string | null;
+  };
+  mcp: {
+    supported: boolean;
+    scope: "user" | "project" | null;
+    config_path_template: string | null;
+    config_path_env: string | null;
+    format: "codex_toml" | "json_map" | null;
+    root_key: string | null;
+  };
+  manifest: {
+    supported: boolean;
+    path_template: string | null;
+  };
+  auth: {
+    mode: string | null;
+    instructions: string[];
+  };
+  default_server: {
+    name: string;
+    url: string;
+  };
+  cli_install_template: string;
+};
+
+export type PlatformCatalog = {
+  version: 1;
+  defaults: {
+    skill_name: string;
+    mcp_server_name: string;
+    mcp_server_url: string;
+  };
+  platforms: PlatformCatalogEntry[];
 };
 
 export function loadPlatforms(platformsDir = PLATFORMS_DIR): Record<string, PlatformDefinition> {
@@ -106,6 +152,101 @@ export function resolveInstallPath(spec: PlatformInstallSpec, context: Record<st
 export function authInstructions(platform: PlatformDefinition, context: Record<string, string>): string[] | null {
   if (platform.auth?.mode !== "browser_oauth") return null;
   return (platform.auth.instructions ?? []).map((step) => formatTemplate(step, context));
+}
+
+function normalizePathForCatalog(filePath: string): string {
+  return path.relative(ROOT_DIR, filePath).split(path.sep).join("/");
+}
+
+function joinTemplatePath(root: string, suffix?: string): string {
+  if (!suffix) return root;
+  const cleanedRoot = root.replace(/[\\/]+$/, "");
+  const cleanedSuffix = suffix.replace(/^[\\/]+/, "");
+  return `${cleanedRoot}/${cleanedSuffix}`;
+}
+
+function installPathTemplate(spec?: PlatformInstallSpec): string | null {
+  if (!spec) return null;
+  if (spec.install_path_default) return spec.install_path_default;
+  if (spec.install_root_default) return joinTemplatePath(spec.install_root_default, spec.install_path_suffix);
+  if (spec.install_path_env) return `{${spec.install_path_env}}`;
+  return null;
+}
+
+function cliInstallTemplate(platformId: string): string {
+  return `decision-ops-skill install all ${platformId} --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}`;
+}
+
+function platformToCatalogEntry(platform: PlatformDefinition): PlatformCatalogEntry {
+  const skillSupported = Boolean(platform.skill?.supported);
+  const mcpSupported = Boolean(platform.mcp?.supported);
+  const manifestSupported = Boolean(platform.manifest?.supported);
+  const skillPathTemplate = skillSupported ? installPathTemplate(platform.skill) : null;
+  const mcpPathTemplate = mcpSupported ? installPathTemplate(platform.mcp) : null;
+  const manifestPathTemplate = manifestSupported ? platform.manifest?.build_path ?? ".decisionops/manifest.toml" : null;
+
+  const authContext = {
+    skill_name: SKILL_NAME,
+    repo_path: "{repo_path}",
+    platform_id: platform.id,
+    display_name: platform.display_name,
+    mcp_server_name: DEFAULT_MCP_SERVER_NAME,
+    mcp_server_url: DEFAULT_MCP_SERVER_URL,
+    mcp_config_path: mcpPathTemplate ?? "",
+  };
+
+  return {
+    id: platform.id,
+    display_name: platform.display_name,
+    platform_definition: normalizePathForCatalog(platform.__file__),
+    skill: {
+      supported: skillSupported,
+      install_path_template: skillPathTemplate,
+      install_path_env: platform.skill?.install_path_env ?? null,
+    },
+    mcp: {
+      supported: mcpSupported,
+      scope: platform.mcp?.scope ?? null,
+      config_path_template: mcpPathTemplate,
+      config_path_env: platform.mcp?.install_path_env ?? null,
+      format: platform.mcp?.format ?? null,
+      root_key: platform.mcp?.root_key ?? null,
+    },
+    manifest: {
+      supported: manifestSupported,
+      path_template: manifestPathTemplate,
+    },
+    auth: {
+      mode: platform.auth?.mode ?? null,
+      instructions: authInstructions(platform, authContext) ?? [],
+    },
+    default_server: {
+      name: DEFAULT_MCP_SERVER_NAME,
+      url: DEFAULT_MCP_SERVER_URL,
+    },
+    cli_install_template: cliInstallTemplate(platform.id),
+  };
+}
+
+export function buildPlatformCatalog(platformsDir = PLATFORMS_DIR): PlatformCatalog {
+  const platforms = Object.values(loadPlatforms(platformsDir)).sort((a, b) => a.id.localeCompare(b.id));
+
+  return {
+    version: 1,
+    defaults: {
+      skill_name: SKILL_NAME,
+      mcp_server_name: DEFAULT_MCP_SERVER_NAME,
+      mcp_server_url: DEFAULT_MCP_SERVER_URL,
+    },
+    platforms: platforms.map(platformToCatalogEntry),
+  };
+}
+
+export function writePlatformCatalog(outputPath = DEFAULT_PLATFORM_CATALOG_PATH, platformsDir = PLATFORMS_DIR): string {
+  const catalog = buildPlatformCatalog(platformsDir);
+  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+  fs.writeFileSync(outputPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
+  return outputPath;
 }
 
 // ── Install types ──

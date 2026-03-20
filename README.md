@@ -138,6 +138,7 @@ platforms/                 # Platform target definitions (TOML)
   codex.toml
   antigravity.toml
 scripts/
+  generate-platform-catalog.ts   # Build combined JSON catalog from platforms/*.toml
   validate.ts              # Bundle validation script
 src/
   index.ts                 # Package exports (metadata, platform loader)
@@ -179,6 +180,7 @@ bun test                  # run tests
 - Edit `decision-ops/SKILL.md` for workflow changes
 - Edit `decision-ops/references/*.md` for MCP or format contract changes
 - Add platform support by creating a new TOML in `platforms/`
+- Regenerate `platforms/platform-catalog.json` with `bun run generate:platform-catalog`
 - Run `bun run validate` after changes to verify bundle integrity
 
 ## License

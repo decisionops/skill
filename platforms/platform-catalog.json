@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "defaults": {
+    "skill_name": "decision-ops",
+    "mcp_server_name": "decision-ops-mcp",
+    "mcp_server_url": "https://api.aidecisionops.com/mcp"
+  },
+  "platforms": [
+    {
+      "id": "antigravity",
+      "display_name": "Antigravity",
+      "platform_definition": "platforms/antigravity.toml",
+      "skill": {
+        "supported": true,
+        "install_path_template": "~/.antigravity/skills/{skill_name}",
+        "install_path_env": null
+      },
+      "mcp": {
+        "supported": true,
+        "scope": "user",
+        "config_path_template": "{ANTIGRAVITY_MCP_CONFIG_PATH}",
+        "config_path_env": "ANTIGRAVITY_MCP_CONFIG_PATH",
+        "format": "json_map",
+        "root_key": "mcpServers"
+      },
+      "manifest": {
+        "supported": true,
+        "path_template": ".decisionops/manifest.toml"
+      },
+      "auth": {
+        "mode": "browser_oauth",
+        "instructions": [
+          "Open Antigravity MCP settings and verify server 'decision-ops-mcp' exists at 'https://api.aidecisionops.com/mcp'.",
+          "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
+          "Complete the prompted authentication flow, then retry the same MCP tool call."
+        ]
+      },
+      "default_server": {
+        "name": "decision-ops-mcp",
+        "url": "https://api.aidecisionops.com/mcp"
+      },
+      "cli_install_template": "decision-ops-skill install all antigravity --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
+    },
+    {
+      "id": "claude-code",
+      "display_name": "Claude Code",
+      "platform_definition": "platforms/claude-code.toml",
+      "skill": {
+        "supported": true,
+        "install_path_template": "~/.claude/skills/{skill_name}",
+        "install_path_env": null
+      },
+      "mcp": {
+        "supported": true,
+        "scope": "project",
+        "config_path_template": "{repo_path}/.mcp.json",
+        "config_path_env": "CLAUDE_MCP_CONFIG_PATH",
+        "format": "json_map",
+        "root_key": "mcpServers"
+      },
+      "manifest": {
+        "supported": true,
+        "path_template": ".decisionops/manifest.toml"
+      },
+      "auth": {
+        "mode": "browser_oauth",
+        "instructions": [
+          "Open Claude Code MCP settings and verify server 'decision-ops-mcp' exists at 'https://api.aidecisionops.com/mcp'.",
+          "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
+          "Complete the prompted authentication flow, then retry the same MCP tool call."
+        ]
+      },
+      "default_server": {
+        "name": "decision-ops-mcp",
+        "url": "https://api.aidecisionops.com/mcp"
+      },
+      "cli_install_template": "decision-ops-skill install all claude-code --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
+    },
+    {
+      "id": "codex",
+      "display_name": "Codex",
+      "platform_definition": "platforms/codex.toml",
+      "skill": {
+        "supported": true,
+        "install_path_template": "~/.codex/skills/{skill_name}",
+        "install_path_env": null
+      },
+      "mcp": {
+        "supported": true,
+        "scope": "user",
+        "config_path_template": "~/.codex/config.toml",
+        "config_path_env": "CODEX_CONFIG_PATH",
+        "format": "codex_toml",
+        "root_key": null
+      },
+      "manifest": {
+        "supported": true,
+        "path_template": ".decisionops/manifest.toml"
+      },
+      "auth": {
+        "mode": "browser_oauth",
+        "instructions": [
+          "Open Codex MCP settings and verify server 'decision-ops-mcp' exists at 'https://api.aidecisionops.com/mcp'.",
+          "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
+          "Complete the prompted authentication flow, then retry the same MCP tool call."
+        ]
+      },
+      "default_server": {
+        "name": "decision-ops-mcp",
+        "url": "https://api.aidecisionops.com/mcp"
+      },
+      "cli_install_template": "decision-ops-skill install all codex --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
+    },
+    {
+      "id": "cursor",
+      "display_name": "Cursor",
+      "platform_definition": "platforms/cursor.toml",
+      "skill": {
+        "supported": true,
+        "install_path_template": "~/.cursor/skills/{skill_name}",
+        "install_path_env": null
+      },
+      "mcp": {
+        "supported": true,
+        "scope": "project",
+        "config_path_template": "{repo_path}/.cursor/mcp.json",
+        "config_path_env": "CURSOR_MCP_CONFIG_PATH",
+        "format": "json_map",
+        "root_key": "mcpServers"
+      },
+      "manifest": {
+        "supported": true,
+        "path_template": ".decisionops/manifest.toml"
+      },
+      "auth": {
+        "mode": "browser_oauth",
+        "instructions": [
+          "Open Cursor MCP settings and verify server 'decision-ops-mcp' exists at 'https://api.aidecisionops.com/mcp'.",
+          "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
+          "Complete the prompted authentication flow, then retry the same MCP tool call."
+        ]
+      },
+      "default_server": {
+        "name": "decision-ops-mcp",
+        "url": "https://api.aidecisionops.com/mcp"
+      },
+      "cli_install_template": "decision-ops-skill install all cursor --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
+    },
+    {
+      "id": "vscode",
+      "display_name": "VS Code",
+      "platform_definition": "platforms/vscode.toml",
+      "skill": {
+        "supported": false,
+        "install_path_template": null,
+        "install_path_env": null
+      },
+      "mcp": {
+        "supported": true,
+        "scope": "project",
+        "config_path_template": "{repo_path}/.vscode/mcp.json",
+        "config_path_env": "VSCODE_MCP_CONFIG_PATH",
+        "format": "json_map",
+        "root_key": "servers"
+      },
+      "manifest": {
+        "supported": true,
+        "path_template": ".decisionops/manifest.toml"
+      },
+      "auth": {
+        "mode": "browser_oauth",
+        "instructions": [
+          "Open VS Code MCP settings and verify server 'decision-ops-mcp' exists at 'https://api.aidecisionops.com/mcp'.",
+          "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
+          "Complete the prompted authentication flow, then retry the same MCP tool call."
+        ]
+      },
+      "default_server": {
+        "name": "decision-ops-mcp",
+        "url": "https://api.aidecisionops.com/mcp"
+      },
+      "cli_install_template": "decision-ops-skill install all vscode --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
+    }
+  ]
+}
