@@ -269,7 +269,7 @@ describe("platform catalog", () => {
     expect(codex?.mcp.config_path_template).toBe("~/.codex/config.toml");
     expect(codex?.auth.mode).toBe("browser_oauth");
     expect(codex?.auth.instructions.length).toBeGreaterThan(0);
-    expect(codex?.cli_install_template).toContain("decision-ops-skill install all codex");
+    expect(codex?.cli_install_template).toContain("dops install codex");
 
     const vscode = catalog.platforms.find((platform) => platform.id === "vscode");
     expect(vscode?.skill.supported).toBe(false);

@@ -39,7 +39,7 @@
         "name": "decision-ops-mcp",
         "url": "https://api.aidecisionops.com/mcp"
       },
-      "cli_install_template": "decision-ops-skill install all antigravity --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
+      "cli_install_template": "dops install antigravity --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
     },
     {
       "id": "claude-code",
@@ -74,7 +74,7 @@
         "name": "decision-ops-mcp",
         "url": "https://api.aidecisionops.com/mcp"
       },
-      "cli_install_template": "decision-ops-skill install all claude-code --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
+      "cli_install_template": "dops install claude-code --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
     },
     {
       "id": "codex",
@@ -109,7 +109,7 @@
         "name": "decision-ops-mcp",
         "url": "https://api.aidecisionops.com/mcp"
       },
-      "cli_install_template": "decision-ops-skill install all codex --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
+      "cli_install_template": "dops install codex --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
     },
     {
       "id": "cursor",
@@ -144,7 +144,7 @@
         "name": "decision-ops-mcp",
         "url": "https://api.aidecisionops.com/mcp"
       },
-      "cli_install_template": "decision-ops-skill install all cursor --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
+      "cli_install_template": "dops install cursor --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
     },
     {
       "id": "vscode",
@@ -179,7 +179,7 @@
         "name": "decision-ops-mcp",
         "url": "https://api.aidecisionops.com/mcp"
       },
-      "cli_install_template": "decision-ops-skill install all vscode --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
+      "cli_install_template": "dops install vscode --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}"
     }
   ]
 }

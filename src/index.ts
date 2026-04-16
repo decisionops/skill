@@ -174,7 +174,7 @@ function installPathTemplate(spec?: PlatformInstallSpec): string | null {
 }
 
 function cliInstallTemplate(platformId: string): string {
-  return `decision-ops-skill install all ${platformId} --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}`;
+  return `dops install ${platformId} --repo-path {repo_path} --org-id {org_id} --project-id {project_id} --repo-ref {repo_ref}`;
 }
 
 function platformToCatalogEntry(platform: PlatformDefinition): PlatformCatalogEntry {
