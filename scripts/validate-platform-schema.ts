@@ -11,7 +11,7 @@ const SCHEMA_PATH = path.join(import.meta.dir, "..", "schemas", "platform-types.
 const CATALOG_PATH = path.join(import.meta.dir, "..", "platforms", "platform-catalog.json");
 
 const schema = JSON.parse(fs.readFileSync(SCHEMA_PATH, "utf8"));
-const catalog = JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8"));
+const catalog = JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8")) as { platforms: unknown[] };
 
 const ajv = new Ajv({ allErrors: true });
 
