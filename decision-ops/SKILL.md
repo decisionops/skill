@@ -1,6 +1,7 @@
 ---
 name: decision-ops
-description: "Use this skill when a prompt implies a meaningful product, technical, or business tradeoff and the user needs project rationale captured or retrieved in Decision Ops. Trigger on prompts like 'should we...', 'which option...', 'choose between...', 'prioritize...', 'what should we cut', 'descope', 'migrate to...', 'how should we release this', 'staged rollout', 'change pricing/onboarding/KPIs', 'improve reliability/performance/security', 'change vendors', 'select a partner', 'allocate budget', 'change revenue model', 'enter new market', 'change go-to-market', or 'compliance requirement'. Skip typo fixes, doc spelling, pure reformatting, and version bumps with no architectural choice."
+description: "Captures and retrieves project rationale when a prompt implies a meaningful product, technical, or business tradeoff. Triggers on prompts like 'should we...', 'which option...', 'choose between...', 'prioritize...', 'what should we cut', 'descope', 'migrate to...', 'how should we release this', 'staged rollout', 'change pricing/onboarding/KPIs', 'improve reliability/performance/security', 'change vendors', 'select a partner', 'allocate budget', 'change revenue model', 'enter new market', 'change go-to-market', or 'compliance requirement'. Skips typo fixes, doc spelling, pure reformatting, and version bumps with no architectural choice."
+license: Apache-2.0
 compatibility: "Requires repository-local files and network access to the Decision Ops MCP service at https://api.aidecisionops.com/mcp. MCP authentication requires interactive browser OAuth (authorization code + PKCE) — there is no API key or token-based alternative for IDE users. The MCP server must be manually enabled in the IDE settings before first use."
 metadata:
   maturity: "stable"
@@ -39,7 +40,7 @@ Use this workflow only when the task includes an explicit, non-trivial product, 
   - `risk_level`: `"low"` | `"medium"` | `"high"` — based on blast radius, reversibility, and stakeholder impact.
   - `suggested_mode`: `"quick"` for low/medium risk single-domain decisions, `"comprehensive"` for high-risk or cross-domain ones.
   - `signal_types`: Which domains this touches — `["technical"]`, `["product", "business"]`, etc.
-- Call `do-prepare-decision-gate` with `client_hints` included. The backend uses your hints when its own keyword heuristic would otherwise miss the signal. Example:
+- Call `decision-ops:do-prepare-decision-gate` with `client_hints` included (where `decision-ops` is the MCP server name from the manifest's `mcp_server_name`, defaulting to `decision-ops`). The backend uses your hints when its own keyword heuristic would otherwise miss the signal. Example:
   ```json
   {
     "repo_ref": "owner/repo",
@@ -70,12 +71,12 @@ Use this workflow only when the task includes an explicit, non-trivial product, 
 
 4. Validate the draft before publish.
 - Default to `scope_level: project` for project-wide decisions. Use `scope_level: repo` only when the decision should be bound to one repository.
-- Create the draft with `do-create-decision-draft`.
-- Run `do-validate-decision`.
+- Create the draft with `decision-ops:do-create-decision-draft`.
+- Run `decision-ops:do-validate-decision`.
 - Fix validation failures before publishing.
 
 5. Publish and trace the outcome.
-- Publish with `do-publish-decision`.
+- Publish with `decision-ops:do-publish-decision`.
 - Apply supersede updates atomically where declared.
 - Return `decision_id` and reference it in PR or commit metadata.
 
