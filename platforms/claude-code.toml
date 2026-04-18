@@ -29,3 +29,15 @@ instructions = [
   "Approve the consent screen at auth.aidecisionops.com in your browser.",
   "To clear a stale session, run `/mcp` and choose `Clear authentication` for the same server before retrying.",
 ]
+
+[[auth.triggers]]
+kind = "slash"
+reason = "primary"
+label = "Authenticate via /mcp"
+hint = "Inside {display_name}, run `/mcp`, select `{mcp_server_name}`, choose `Authenticate`."
+
+[[auth.triggers]]
+kind = "slash"
+reason = "reset"
+label = "Clear stale session"
+hint = "Inside {display_name}, run `/mcp`, select `{mcp_server_name}`, choose `Clear authentication`."

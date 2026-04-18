@@ -34,6 +34,20 @@
           "Invoke any Decision Ops MCP tool in chat; Antigravity will open a browser for OAuth the first time.",
           "To reset a stale session, toggle `decision-ops-mcp` off and back on in the MCP Store (no CLI trigger exists).",
           "Known limitation: Antigravity does not fully implement the MCP OAuth 2.1 / RFC 9728 spec; servers that require dynamic client registration may not auth."
+        ],
+        "triggers": [
+          {
+            "kind": "manual",
+            "reason": "primary",
+            "label": "Toggle server in MCP Store",
+            "hint": "Open Antigravity → Agent panel → MCP Store, ensure `decision-ops-mcp` is enabled, then invoke any Decision Ops tool in chat to surface the browser OAuth prompt. Antigravity has no CLI or palette trigger; see also RFC 9728 limitations on Antigravity's side."
+          },
+          {
+            "kind": "manual",
+            "reason": "reset",
+            "label": "Toggle off/on",
+            "hint": "Open Antigravity → Agent panel → MCP Store, toggle `decision-ops-mcp` off and back on."
+          }
         ]
       },
       "default_server": {
@@ -70,6 +84,20 @@
           "Select `decision-ops-mcp` from the list, then choose `Authenticate`.",
           "Approve the consent screen at auth.aidecisionops.com in your browser.",
           "To clear a stale session, run `/mcp` and choose `Clear authentication` for the same server before retrying."
+        ],
+        "triggers": [
+          {
+            "kind": "slash",
+            "reason": "primary",
+            "label": "Authenticate via /mcp",
+            "hint": "Inside Claude Code, run `/mcp`, select `decision-ops-mcp`, choose `Authenticate`."
+          },
+          {
+            "kind": "slash",
+            "reason": "reset",
+            "label": "Clear stale session",
+            "hint": "Inside Claude Code, run `/mcp`, select `decision-ops-mcp`, choose `Clear authentication`."
+          }
         ]
       },
       "default_server": {
@@ -105,6 +133,30 @@
           "Run `codex mcp login decision-ops-mcp` to trigger the OAuth flow in your browser.",
           "Approve the consent screen at auth.aidecisionops.com.",
           "If authentication is already cached against a stale URL, run `codex mcp logout decision-ops-mcp` first."
+        ],
+        "triggers": [
+          {
+            "kind": "cli",
+            "reason": "primary",
+            "label": "Authenticate",
+            "command": [
+              "codex",
+              "mcp",
+              "login",
+              "decision-ops-mcp"
+            ]
+          },
+          {
+            "kind": "cli",
+            "reason": "reset",
+            "label": "Clear stale credentials",
+            "command": [
+              "codex",
+              "mcp",
+              "logout",
+              "decision-ops-mcp"
+            ]
+          }
         ]
       },
       "default_server": {
@@ -140,6 +192,20 @@
           "Open Cursor Settings → Tools & MCP and verify `decision-ops-mcp` is enabled.",
           "Invoke any Decision Ops MCP tool to trigger the browser OAuth flow; approve the consent screen at auth.aidecisionops.com.",
           "If a stale token blocks login: open Command Palette (Cmd/Ctrl+Shift+P) → `Clear All MCP Tokens`, then toggle `decision-ops-mcp` off and back on. Cursor has no per-server clear yet (forum request open)."
+        ],
+        "triggers": [
+          {
+            "kind": "palette",
+            "reason": "primary",
+            "label": "Toggle server to trigger OAuth",
+            "hint": "Open Cursor Settings → Tools & MCP, toggle `decision-ops-mcp` off and back on, then invoke any Decision Ops tool to surface the browser OAuth prompt."
+          },
+          {
+            "kind": "palette",
+            "reason": "reset",
+            "label": "Clear stale tokens (global)",
+            "hint": "Open Command Palette (Cmd/Ctrl+Shift+P) → `Clear All MCP Tokens`. Cursor has no per-server clear yet — this wipes tokens for every MCP server."
+          }
         ]
       },
       "default_server": {
@@ -176,6 +242,20 @@
           "Approve the consent screen at auth.aidecisionops.com in your browser.",
           "To clear a stale session, select `decision-ops-mcp` in `MCP: List Servers` → `Disconnect Account` before starting the server again.",
           "Requires VS Code 1.102+ (built-in MCP). Account-level management: Accounts menu → `Manage Trusted MCP Servers`."
+        ],
+        "triggers": [
+          {
+            "kind": "palette",
+            "reason": "primary",
+            "label": "Start server to trigger OAuth",
+            "hint": "Open Command Palette (Cmd/Ctrl+Shift+P) → `MCP: List Servers` → select `decision-ops-mcp` → `Start Server`. Requires VS Code 1.102+."
+          },
+          {
+            "kind": "palette",
+            "reason": "reset",
+            "label": "Disconnect account",
+            "hint": "Open Command Palette (Cmd/Ctrl+Shift+P) → `MCP: List Servers` → select `decision-ops-mcp` → `Disconnect Account`, then start the server again."
+          }
         ]
       },
       "default_server": {

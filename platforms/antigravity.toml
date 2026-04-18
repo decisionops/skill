@@ -28,3 +28,15 @@ instructions = [
   "To reset a stale session, toggle `{mcp_server_name}` off and back on in the MCP Store (no CLI trigger exists).",
   "Known limitation: Antigravity does not fully implement the MCP OAuth 2.1 / RFC 9728 spec; servers that require dynamic client registration may not auth.",
 ]
+
+[[auth.triggers]]
+kind = "manual"
+reason = "primary"
+label = "Toggle server in MCP Store"
+hint = "Open Antigravity → Agent panel → MCP Store, ensure `{mcp_server_name}` is enabled, then invoke any Decision Ops tool in chat to surface the browser OAuth prompt. Antigravity has no CLI or palette trigger; see also RFC 9728 limitations on Antigravity's side."
+
+[[auth.triggers]]
+kind = "manual"
+reason = "reset"
+label = "Toggle off/on"
+hint = "Open Antigravity → Agent panel → MCP Store, toggle `{mcp_server_name}` off and back on."

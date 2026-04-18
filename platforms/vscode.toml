@@ -25,3 +25,15 @@ instructions = [
   "To clear a stale session, select `{mcp_server_name}` in `MCP: List Servers` → `Disconnect Account` before starting the server again.",
   "Requires VS Code 1.102+ (built-in MCP). Account-level management: Accounts menu → `Manage Trusted MCP Servers`.",
 ]
+
+[[auth.triggers]]
+kind = "palette"
+reason = "primary"
+label = "Start server to trigger OAuth"
+hint = "Open Command Palette (Cmd/Ctrl+Shift+P) → `MCP: List Servers` → select `{mcp_server_name}` → `Start Server`. Requires VS Code 1.102+."
+
+[[auth.triggers]]
+kind = "palette"
+reason = "reset"
+label = "Disconnect account"
+hint = "Open Command Palette (Cmd/Ctrl+Shift+P) → `MCP: List Servers` → select `{mcp_server_name}` → `Disconnect Account`, then start the server again."

@@ -23,9 +23,21 @@ export type PlatformInstallSpec = {
   root_key?: string;
 };
 
+export type AuthTriggerKind = "cli" | "slash" | "palette" | "manual";
+export type AuthTriggerReason = "primary" | "reset";
+
+export type AuthTrigger = {
+  kind: AuthTriggerKind;
+  reason?: AuthTriggerReason;
+  label?: string;
+  hint?: string;
+  command?: string[];
+};
+
 export type PlatformAuthSpec = {
   mode?: string;
   instructions?: string[];
+  triggers?: AuthTrigger[];
 };
 
 export type PlatformDefinition = {
@@ -62,6 +74,7 @@ export type PlatformCatalogEntry = {
   auth: {
     mode: string | null;
     instructions: string[];
+    triggers: AuthTrigger[];
   };
   default_server: {
     name: string;
@@ -154,6 +167,17 @@ export function authInstructions(platform: PlatformDefinition, context: Record<s
   return (platform.auth.instructions ?? []).map((step) => formatTemplate(step, context));
 }
 
+export function authTriggers(platform: PlatformDefinition, context: Record<string, string>): AuthTrigger[] {
+  // Render templates inside trigger fields so consumers get usable values.
+  return (platform.auth?.triggers ?? []).map((trigger) => ({
+    kind: trigger.kind,
+    reason: trigger.reason ?? "primary",
+    label: trigger.label ? formatTemplate(trigger.label, context) : undefined,
+    hint: trigger.hint ? formatTemplate(trigger.hint, context) : undefined,
+    command: trigger.command ? trigger.command.map((part) => formatTemplate(part, context)) : undefined,
+  }));
+}
+
 function normalizePathForCatalog(filePath: string): string {
   return path.relative(ROOT_DIR, filePath).split(path.sep).join("/");
 }
@@ -219,6 +243,7 @@ function platformToCatalogEntry(platform: PlatformDefinition): PlatformCatalogEn
     auth: {
       mode: platform.auth?.mode ?? null,
       instructions: authInstructions(platform, authContext) ?? [],
+      triggers: authTriggers(platform, authContext),
     },
     default_server: {
       name: DEFAULT_MCP_SERVER_NAME,

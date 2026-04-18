@@ -28,3 +28,15 @@ instructions = [
   "Invoke any Decision Ops MCP tool to trigger the browser OAuth flow; approve the consent screen at auth.aidecisionops.com.",
   "If a stale token blocks login: open Command Palette (Cmd/Ctrl+Shift+P) → `Clear All MCP Tokens`, then toggle `{mcp_server_name}` off and back on. Cursor has no per-server clear yet (forum request open).",
 ]
+
+[[auth.triggers]]
+kind = "palette"
+reason = "primary"
+label = "Toggle server to trigger OAuth"
+hint = "Open Cursor Settings → Tools & MCP, toggle `{mcp_server_name}` off and back on, then invoke any Decision Ops tool to surface the browser OAuth prompt."
+
+[[auth.triggers]]
+kind = "palette"
+reason = "reset"
+label = "Clear stale tokens (global)"
+hint = "Open Command Palette (Cmd/Ctrl+Shift+P) → `Clear All MCP Tokens`. Cursor has no per-server clear yet — this wipes tokens for every MCP server."

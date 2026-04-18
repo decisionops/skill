@@ -29,3 +29,15 @@ instructions = [
   "Approve the consent screen at auth.aidecisionops.com.",
   "If authentication is already cached against a stale URL, run `codex mcp logout {mcp_server_name}` first.",
 ]
+
+[[auth.triggers]]
+kind = "cli"
+reason = "primary"
+label = "Authenticate"
+command = ["codex", "mcp", "login", "{mcp_server_name}"]
+
+[[auth.triggers]]
+kind = "cli"
+reason = "reset"
+label = "Clear stale credentials"
+command = ["codex", "mcp", "logout", "{mcp_server_name}"]
