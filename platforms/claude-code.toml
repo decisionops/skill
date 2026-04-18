@@ -24,7 +24,8 @@ build_path = ".decisionops/manifest.toml"
 [auth]
 mode = "browser_oauth"
 instructions = [
-  "Open {display_name} MCP settings and verify server '{mcp_server_name}' exists at '{mcp_server_url}'.",
-  "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
-  "Complete the prompted authentication flow, then retry the same MCP tool call.",
+  "Inside {display_name}, run the `/mcp` slash command.",
+  "Select `{mcp_server_name}` from the list, then choose `Authenticate`.",
+  "Approve the consent screen at auth.aidecisionops.com in your browser.",
+  "To clear a stale session, run `/mcp` and choose `Clear authentication` for the same server before retrying.",
 ]

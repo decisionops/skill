@@ -20,7 +20,8 @@ build_path = ".decisionops/manifest.toml"
 [auth]
 mode = "browser_oauth"
 instructions = [
-  "Open {display_name} MCP settings and verify server '{mcp_server_name}' exists at '{mcp_server_url}'.",
-  "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
-  "Complete the prompted authentication flow, then retry the same MCP tool call.",
+  "Open Command Palette (Cmd/Ctrl+Shift+P) → `MCP: List Servers`, select `{mcp_server_name}`, then `Start Server` to trigger OAuth.",
+  "Approve the consent screen at auth.aidecisionops.com in your browser.",
+  "To clear a stale session, select `{mcp_server_name}` in `MCP: List Servers` → `Disconnect Account` before starting the server again.",
+  "Requires VS Code 1.102+ (built-in MCP). Account-level management: Accounts menu → `Manage Trusted MCP Servers`.",
 ]

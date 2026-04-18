@@ -30,9 +30,10 @@
       "auth": {
         "mode": "browser_oauth",
         "instructions": [
-          "Open Antigravity MCP settings and verify server 'decision-ops-mcp' exists at 'https://api.aidecisionops.com/mcp'.",
-          "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
-          "Complete the prompted authentication flow, then retry the same MCP tool call."
+          "Open Antigravity → Agent panel → MCP Store and confirm `decision-ops-mcp` is enabled.",
+          "Invoke any Decision Ops MCP tool in chat; Antigravity will open a browser for OAuth the first time.",
+          "To reset a stale session, toggle `decision-ops-mcp` off and back on in the MCP Store (no CLI trigger exists).",
+          "Known limitation: Antigravity does not fully implement the MCP OAuth 2.1 / RFC 9728 spec; servers that require dynamic client registration may not auth."
         ]
       },
       "default_server": {
@@ -65,9 +66,10 @@
       "auth": {
         "mode": "browser_oauth",
         "instructions": [
-          "Open Claude Code MCP settings and verify server 'decision-ops-mcp' exists at 'https://api.aidecisionops.com/mcp'.",
-          "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
-          "Complete the prompted authentication flow, then retry the same MCP tool call."
+          "Inside Claude Code, run the `/mcp` slash command.",
+          "Select `decision-ops-mcp` from the list, then choose `Authenticate`.",
+          "Approve the consent screen at auth.aidecisionops.com in your browser.",
+          "To clear a stale session, run `/mcp` and choose `Clear authentication` for the same server before retrying."
         ]
       },
       "default_server": {
@@ -100,9 +102,9 @@
       "auth": {
         "mode": "browser_oauth",
         "instructions": [
-          "Open Codex MCP settings and verify server 'decision-ops-mcp' exists at 'https://api.aidecisionops.com/mcp'.",
-          "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
-          "Complete the prompted authentication flow, then retry the same MCP tool call."
+          "Run `codex mcp login decision-ops-mcp` to trigger the OAuth flow in your browser.",
+          "Approve the consent screen at auth.aidecisionops.com.",
+          "If authentication is already cached against a stale URL, run `codex mcp logout decision-ops-mcp` first."
         ]
       },
       "default_server": {
@@ -135,9 +137,9 @@
       "auth": {
         "mode": "browser_oauth",
         "instructions": [
-          "Open Cursor MCP settings and verify server 'decision-ops-mcp' exists at 'https://api.aidecisionops.com/mcp'.",
-          "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
-          "Complete the prompted authentication flow, then retry the same MCP tool call."
+          "Open Cursor Settings → Tools & MCP and verify `decision-ops-mcp` is enabled.",
+          "Invoke any Decision Ops MCP tool to trigger the browser OAuth flow; approve the consent screen at auth.aidecisionops.com.",
+          "If a stale token blocks login: open Command Palette (Cmd/Ctrl+Shift+P) → `Clear All MCP Tokens`, then toggle `decision-ops-mcp` off and back on. Cursor has no per-server clear yet (forum request open)."
         ]
       },
       "default_server": {
@@ -170,9 +172,10 @@
       "auth": {
         "mode": "browser_oauth",
         "instructions": [
-          "Open VS Code MCP settings and verify server 'decision-ops-mcp' exists at 'https://api.aidecisionops.com/mcp'.",
-          "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
-          "Complete the prompted authentication flow, then retry the same MCP tool call."
+          "Open Command Palette (Cmd/Ctrl+Shift+P) → `MCP: List Servers`, select `decision-ops-mcp`, then `Start Server` to trigger OAuth.",
+          "Approve the consent screen at auth.aidecisionops.com in your browser.",
+          "To clear a stale session, select `decision-ops-mcp` in `MCP: List Servers` → `Disconnect Account` before starting the server again.",
+          "Requires VS Code 1.102+ (built-in MCP). Account-level management: Accounts menu → `Manage Trusted MCP Servers`."
         ]
       },
       "default_server": {

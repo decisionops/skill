@@ -23,7 +23,8 @@ build_path = ".decisionops/manifest.toml"
 [auth]
 mode = "browser_oauth"
 instructions = [
-  "Open {display_name} MCP settings and verify server '{mcp_server_name}' exists at '{mcp_server_url}'.",
-  "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
-  "Complete the prompted authentication flow, then retry the same MCP tool call.",
+  "Open {display_name} → Agent panel → MCP Store and confirm `{mcp_server_name}` is enabled.",
+  "Invoke any Decision Ops MCP tool in chat; Antigravity will open a browser for OAuth the first time.",
+  "To reset a stale session, toggle `{mcp_server_name}` off and back on in the MCP Store (no CLI trigger exists).",
+  "Known limitation: Antigravity does not fully implement the MCP OAuth 2.1 / RFC 9728 spec; servers that require dynamic client registration may not auth.",
 ]

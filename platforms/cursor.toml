@@ -24,7 +24,7 @@ build_path = ".decisionops/manifest.toml"
 [auth]
 mode = "browser_oauth"
 instructions = [
-  "Open {display_name} MCP settings and verify server '{mcp_server_name}' exists at '{mcp_server_url}'.",
-  "Invoke any Decision Ops MCP tool to trigger interactive login/consent.",
-  "Complete the prompted authentication flow, then retry the same MCP tool call.",
+  "Open Cursor Settings → Tools & MCP and verify `{mcp_server_name}` is enabled.",
+  "Invoke any Decision Ops MCP tool to trigger the browser OAuth flow; approve the consent screen at auth.aidecisionops.com.",
+  "If a stale token blocks login: open Command Palette (Cmd/Ctrl+Shift+P) → `Clear All MCP Tokens`, then toggle `{mcp_server_name}` off and back on. Cursor has no per-server clear yet (forum request open).",
 ]
